@@ -1,15 +1,24 @@
 # Assignment 2 Exercise 1 
 
-# Define a function to standardize the numeric columns of a dataset
-standardize_data <- function(data) {
+# Define a function to perform different data transfromations
+transform_data <- function(data, transformation_type = "standardize") {
   numeric_columns <- sapply(data, is.numeric)
-  data[, numeric_columns] <- scale(data[, numeric_columns])
+  if (transformation_type == "standardize") {
+    data[, numeric_columns] <- scale(data[, numeric_columns])
+  } else if (transformation_type == "log_transform") {
+    data[, numeric_columns] <- log(data[, numeric_columns] + 1) # Adding 1 to avoid log(0)
+  }
+  
   return(data)
 }
 
-# Test the standardize_data function on the mtcars dataset
+# Test the transform_data function on the mtcars dataset with different transformations
 data(mtcars)
-standardized_mtcars <- standardize_data(mtcars)
 
-# Display the first few rows of the standardized dataset
+# Standardize the data
+standardized_mtcars <- transform_data(mtcars, transformation_type = "standardize")
 head(standardized_mtcars)
+
+# Log-transform the data
+log_transformed_mtcars <- transform_data(mtcars, transformation_type = "log_transform")
+head(log_transformed_mtcars)
