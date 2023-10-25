@@ -1,0 +1,80 @@
+---
+title: "Data Transformation in R"
+author: "Loris Moraiti"
+date: "2023-10-25"
+output:
+  html_document:
+    keep_md: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+This document explains how to use the `transform_data` function in R to perform two different data transformations on a dataset.
+
+```{r function, echo=TRUE}
+# Define a function to perform different data transfromations
+transform_data <- function(data, transformation_type = "standardize") {
+  numeric_columns <- sapply(data, is.numeric)
+  if (transformation_type == "standardize") {
+    data[, numeric_columns] <- scale(data[, numeric_columns])
+  } else if (transformation_type == "log_transform") {
+    data[, numeric_columns] <- log(data[, numeric_columns] + 1) # Adding 1 to avoid log(0)
+  }
+  
+  return(data)
+}
+```
+
+# Function Overview
+
+The `transform_data` function has the following functionality:
+
+- It takes two arguments:
+  1. `data`: The dataset you want to transform.
+  2. `transformation_type`: A string that determines the type of transformation to perform. It can be one of the following:
+    - `"standardize"`: Standardizes the numeric columns to have a mean of 0 and a standard deviation of 1.
+    - `"log_transform"`: Applies a natural logarithm transformation to the numeric columns, with a small constant added to avoid taking the logarithm of zero.
+
+# Usage
+
+To use the `transform_data` function, follow these steps:
+
+1. Load your dataset. For example, you can use the built-in mtcars dataset.
+
+```{r cars, echo=FALSE}
+# Load the mtcars dataset
+data(mtcars)
+```
+
+2. Call the 'transform_data' function with your dataset and specify the transformation type. Depending on the 'transformation_type' argument, the function outputs different results. These are displayed below.
+
+## transformation_type = "standardize"
+
+```{r cars standardize, echo=FALSE}
+# Standardize the data
+standardized_mtcars <- transform_data(mtcars, transformation_type = "standardize")
+head(standardized_mtcars)
+```
+
+## transformation_type = "log_transform"
+
+```{r cars log, echo=FALSE}
+# Log-transform the data
+log_transformed_mtcars <- transform_data(mtcars, transformation_type = "log_transform")
+head(log_transformed_mtcars)
+```
+
+## Conclusion
+
+This R Markdown document demonstrates how to use the transform_data function and highlights the different outputs depending on the value of the transformation_type argument. You can use this function to tailor data transformations to your specific analysis needs.
+
+## Appendix: All code in this assignment
+
+```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE} 
+# this chunk generates the complete code appendix. 
+# eval=FALSE tells R not to run (``evaluate'') the code here (it was already run before).
+```
